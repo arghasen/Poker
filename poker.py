@@ -34,3 +34,10 @@ def cardRanks(cards):
 	ranks = ['--23456789TJQA'.index(r) for r,s in cards]
 	ranks.sort(reverse = true)
 	return ranks
+
+def stright(ranks):
+	return (max(ranks)-min(ranks) == 4) and len(set(ranks)) == 5
+
+def flush(hand):
+	suits = [s for r,s in hand]
+	return len(set(hand) == 1)

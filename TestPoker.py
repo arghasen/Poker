@@ -11,6 +11,10 @@ def testPoker():
 	assert poker.cardRanks(sf) == [10, 9, 8, 7, 6]
 	assert poker.cardRanks(fk) == [9, 9, 9, 9, 7 ]
 	assert poker.cardRanks(fh) == [10, 10, 10, 7, 7]
+	assert poker.straight([9, 8, 7, 6, 5]) == true
+	assert poker.straight([9, 8, 7, 6, 4]) == false
+	assert poker.flush(sf) == true
+	assert poker.flush(fk) == false
 	assert poker.poker( [ sf, fk, fh ] ) == sf
 	assert poker.poker( [ fk, fh ] ) == fk
 	assert poker.poker( [ fh, fh ] ) == fh
