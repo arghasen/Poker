@@ -14,7 +14,7 @@ def handRank(hand ):
 		return (8, max(ranks)) # Highest card in the stright gives the entire hand.
 	elif kind(4, ranks):
 	 	return (7, kind(4, ranks), kind(1, ranks)) # Break ties by using which card is 4 times and if still equal use the final card. 
-	elif fullHouse(hand):
+	elif fullHouse(ranks):
 		return (6, kind(3, ranks), kind(2,ranks)) #Break ties by using the cards in the full house.
 	elif flush(hand):
 		return (5, ranks)
@@ -32,12 +32,33 @@ def handRank(hand ):
 def cardRanks(cards):
 	"Given a set of cards return their ranks, in sorted order"
 	ranks = ['--23456789TJQA'.index(r) for r,s in cards]
-	ranks.sort(reverse = true)
+	ranks.sort(reverse = True)
 	return ranks
 
-def stright(ranks):
+def straight(ranks):
 	return (max(ranks)-min(ranks) == 4) and len(set(ranks)) == 5
 
 def flush(hand):
 	suits = [s for r,s in hand]
-	return len(set(hand) == 1)
+	return len(set(suits)) == 1
+
+def kind(n, ranks):
+	"Given a set of ranks, return the first rank that is exactly n times"
+	"If no such card exists return none"
+	for r in ranks:
+		if ranks.count(r) == n:
+			return r
+	return None;		
+
+def fullHouse(ranks):
+	"If a 3 of a kind and 2 of a kind exists in the same hand"
+	return kind(3,ranks) and kind(2,ranks)
+
+def twoPair(ranks):
+	"if 2pairs are avialable in the hand return the tuple else None"
+	highPair = kind(2,ranks)
+	lowPair = kind(2, list(reversed(ranks)))
+	if highPair and highPair != lowPair:
+		return (highPair, lowPair)
+	else:
+		return None
