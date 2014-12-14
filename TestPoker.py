@@ -9,6 +9,10 @@ def testPoker():
 	fk = "9D 9H 9S 9C 7D".split() # Four of a Kind
 	fh = "TD TC TH 7C 7D".split() # Full House
 	assert poker.poker( [ sf, fk, fh ] ) == sf
+	assert poker.poker( [ fk, fh ] ) == fk
+	assert poker.poker( [ fh, fh ] ) == fh
+	assert poker.poker( [ sf, fh ] ) == sf
+	assert poker.poker( [ sf ] + 99 * [ fh ] ) == sf
 	return "tests pass"
 
 print testPoker()
