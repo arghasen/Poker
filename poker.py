@@ -18,13 +18,19 @@ def handRank(hand ):
 		return (6, kind(3, ranks), kind(2,ranks)) #Break ties by using the cards in the full house.
 	elif flush(hand):
 		return (5, ranks)
-	elif stright(hands)
+	elif stright(hands):
 		return (4, max(ranks))
-	elif kind(3, ranks)
+	elif kind(3, ranks):
 		return (3, kind(3, ranks), ranks)
 	elif twoPair(hands):
 		return (2, twoPair(ranks), ranks)
-	elif kind(2, ranks)
+	elif kind(2, ranks):
 		return (1, kind(2, ranks), ranks)
 	else:
 		return (0, ranks);
+
+def cardRanks(cards):
+	"Given a set of cards return their ranks, in sorted order"
+	ranks = ['--23456789TJQA'.index(r) for r,s in cards]
+	ranks.sort(reverse = true)
+	return ranks
