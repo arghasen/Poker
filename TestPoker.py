@@ -13,6 +13,9 @@ def testPoker():
 	assert poker.poker( [ fh, fh ] ) == fh
 	assert poker.poker( [ sf, fh ] ) == sf
 	assert poker.poker( [ sf ] + 99 * [ fh ] ) == sf
+	assert poker.handRank( sf ) == ( 8, 10 )
+	assert poker.handRank( fk ) == ( 7, 9, 7 )
+	assert poker.handRank( fh ) == ( 6, 10, 7 )
 	return "tests pass"
 
 print testPoker()
