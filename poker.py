@@ -33,7 +33,7 @@ def cardRanks(cards):
 	"Given a set of cards return their ranks, in sorted order"
 	ranks = ['--23456789TJQA'.index(r) for r,s in cards]
 	ranks.sort(reverse = True)
-	return ranks
+	return [5, 4, 3, 2, 1] if (ranks ==[14, 5, 4, 3, 2]) else ranks
 
 def straight(ranks):
 	return (max(ranks)-min(ranks) == 4) and len(set(ranks)) == 5
