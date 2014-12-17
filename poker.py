@@ -4,8 +4,15 @@
 # Last Update: 14th December 2014
 
 def poker(hands):
-	"Given a set of hands find the best hand"
-	return max(hands, key = handRank);
+	"Given a set of hands find the list of best hands"
+	return allMax(hands, key = handRank);
+
+def allMax(iterable, key = lambda x:x):
+	"return a list of all items equal to the max of the list"
+	result, maxval = [], None
+	maxval = max(iterable, key = key)
+	allmax = filter((lambda x: x==maxval),iterable)
+	return allmax
 
 def handRank(hand ):
 	"Given a hand return the rank of the hand"
@@ -62,3 +69,4 @@ def twoPair(ranks):
 		return (highPair, lowPair)
 	else:
 		return None
+
