@@ -2,6 +2,7 @@
 # Author: Argha Sen
 # Start Date : 14th December 2014
 # Last Update: 14th December 2014
+import random
 
 def poker(hands):
 	"Given a set of hands find the list of best hands"
@@ -69,4 +70,10 @@ def twoPair(ranks):
 		return (highPair, lowPair)
 	else:
 		return None
+
+def deal(numhands, n = 5, deck=[r+s for r in '23456789TJQA' for s in 'SHDC' ]):
+	"Shuffle the card and deal out num hands of n card each"
+	random.shuffle(deck);
+	return [deck[n*i:n*(i+1)] for i in range(numhands)]		
+
 
