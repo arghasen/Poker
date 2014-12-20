@@ -43,5 +43,5 @@ def zebra_puzzle():
         if nextto(kools, horse)  # 12
         if luckystrike is ojdrink  # 13
         if japanese is parliaments  # 14
-        if nextto(norwegian, blue)  #15
+        if nextto(norwegian, blue)  # 15
     )
