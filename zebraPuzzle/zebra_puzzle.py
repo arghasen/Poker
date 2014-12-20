@@ -35,9 +35,9 @@ def zebra_puzzle():
         if coffee is green  # 4
         if ukranian is tea  # 5
         if milk is middle  # 9
-        if luckystrike is ojdrink  # 13
         for (oldgold, kools, chesterfields, luckystrike, parliaments) in orderings
         if kools is yellow  # 8
+        if luckystrike is ojdrink  # 13
         if japanese is parliaments  # 14
         for (dog, snails, fox, horse, zebra) in orderings
         if spaniard is dog  # 3
@@ -45,3 +45,4 @@ def zebra_puzzle():
         if nextto(chesterfields, fox)  # 11
         if nextto(kools, horse)  # 12
     )
+print zebra_puzzle()
