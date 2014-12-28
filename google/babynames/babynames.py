@@ -8,7 +8,7 @@
 
 import sys
 import re
-
+import glob
 """Baby Names exercise
 
 Define the extract_names() function below and change main()
@@ -40,8 +40,14 @@ def extract_names(filename):
   followed by the name-rank strings in alphabetical order.
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
-  # +++your code here+++
-  return
+  fileptr=open(filename)
+  filestr = fileptr.read()
+  year = map(int,re.findall(r"Popularity in (\d\d\d\d)",filestr))[0]
+  name_dict={}
+  for name in re.findall(r"<td>(\d+)</td><td>(\w+)</td><td>(\w+)</td>",filestr):
+    name_dict[name[1]] =int(name[0])
+    name_dict[name[2]] =int(name[0])
+  return name_dict, year
 
 
 def main():
@@ -63,6 +69,18 @@ def main():
   # +++your code here+++
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
+  year_name_dict={}
+  for argu in args:
+    for arg in glob.glob(argu):
+      print arg
+      name_dict, year= extract_names(arg)
+      name_keys = name_dict.keys()
+      for name in name_keys:
+        if name in year_name_dict:
+          year_name_dict[name] += [(name_dict[name],year)]
+        else:
+          year_name_dict[name] = [(name_dict[name],year)]
+  print year_name_dict
   
 if __name__ == '__main__':
   main()
