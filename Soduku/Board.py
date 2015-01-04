@@ -12,15 +12,17 @@ class Board(object):
     '''
 
     
-    def reduce_keys_from_rows(self, x, y):
-        print x,y
+    def reduce_keys_from_rows(self, x):
         for z in xrange(self.vertical_size):
             if self.grid[x][z] != 0:
-                self.grid_val[x] = [a.replace(self.grid[x][z], '')  if len(a)>1 else a for a in self.grid_val[x]]
-                #pass
+                self.grid_val[x] = [a.replace(self.grid[x][z], '')  if len(a) > 1 else a for a in self.grid_val[x]]
+                # pass
     
-    def reduce_keys_from_colums(self, x, y):
-        pass
+    def reduce_keys_from_colums(self, x,y):
+        for z in xrange(self.horizontal_size):
+            if self.grid[z][y] != 0:
+                a = self.grid_val[x][y]
+                self.grid_val[x][y] = a.replace(self.grid[z][y], '')  if len(a) > 1 else a 
     
     
     def reduce_keys_from_box(self, x, y):
@@ -31,8 +33,8 @@ class Board(object):
         for x in xrange(self.horizontal_size):
             for y in xrange(self.vertical_size):
                 if self.grid[x][y] == 0:
-                    self.reduce_keys_from_rows(x, y)
-                    self.reduce_keys_from_colums(x, y)
+                    self.reduce_keys_from_rows(x)
+                    self.reduce_keys_from_colums(x,y)
                     self.reduce_keys_from_box(x, y)
         self.print_grid(True)
          
