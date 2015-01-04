@@ -80,7 +80,8 @@ def main():
           year_name_dict[name] += [(name_dict[name],year)]
         else:
           year_name_dict[name] = [(name_dict[name],year)]
-  print year_name_dict
+  for name in (year_name_dict.keys()):
+    print name,": ", year_name_dict[name]
   
 if __name__ == '__main__':
   main()
