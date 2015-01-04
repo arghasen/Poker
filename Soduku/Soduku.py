@@ -114,8 +114,8 @@ USAGE
 def startSoduku(filename):
     file_ptr =open(filename)
     board_string = file_ptr.read()
-    Board(board_string)
-    
+    board = Board(board_string)
+    board.print_grid()
     
 if __name__ == "__main__":
     if DEBUG:
@@ -137,4 +137,5 @@ if __name__ == "__main__":
         statsfile.close()
         sys.exit(0)
     startSoduku(sys.argv[1])
+    
     #sys.exit(main())
