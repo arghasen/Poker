@@ -1,5 +1,3 @@
-#!/usr/local/bin/python2.7
-# encoding: utf-8
 '''
 Soduku -- Soduku Solver
 
@@ -19,6 +17,7 @@ import os
 
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
+from Board import Board
 
 __all__ = []
 __version__ = 0.1
@@ -75,10 +74,10 @@ USAGE
         parser.add_argument("-e", "--exclude", dest="exclude", help="exclude paths matching this regex pattern. [default: %(default)s]", metavar="RE" )
         parser.add_argument('-V', '--version', action='version', version=program_version_message)
         parser.add_argument(dest="paths", help="paths to folder(s) with source file(s) [default: %(default)s]", metavar="path", nargs='+')
-
+        
         # Process arguments
         args = parser.parse_args()
-
+        print "bachao"
         paths = args.paths
         verbose = args.verbose
         recurse = args.recurse
@@ -88,6 +87,7 @@ USAGE
         if verbose > 0:
             print("Verbose mode on")
             if recurse:
+                raise NotImplementedError("Not Implemented")
                 print("Recursive mode on")
             else:
                 print("Recursive mode off")
@@ -110,6 +110,13 @@ USAGE
         sys.stderr.write(indent + "  for help use --help")
         return 2
 
+
+def startSoduku(filename):
+    file_ptr =open(filename)
+    board_string = file_ptr.read()
+    Board(board_string)
+    
+    
 if __name__ == "__main__":
     if DEBUG:
         sys.argv.append("-h")
@@ -121,7 +128,7 @@ if __name__ == "__main__":
     if PROFILE:
         import cProfile
         import pstats
-        profile_filename = 'Board_profile.txt'
+        profile_filename = 'Soduku_profile.txt'
         cProfile.run('main()', profile_filename)
         statsfile = open("profile_stats.txt", "wb")
         p = pstats.Stats(profile_filename, stream=statsfile)
@@ -129,4 +136,5 @@ if __name__ == "__main__":
         stats.print_stats()
         statsfile.close()
         sys.exit(0)
-    sys.exit(main())
+    startSoduku(sys.argv[1])
+    #sys.exit(main())
