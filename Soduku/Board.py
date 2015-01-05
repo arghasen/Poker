@@ -10,7 +10,12 @@ class Board(object):
     '''
     This is the board of the soduku
     '''
-
+    def count_candidates(self):
+        counter = 0
+        for x in xrange(self.horizontal_size):
+            for y in xrange(self.vertical_size):
+                counter += len(self.grid_val[(x, y)])
+        print "Total Keys:", counter
     
     def reduce_keys_from_rows(self, x):
         for z in xrange(self.vertical_size):
@@ -47,14 +52,17 @@ class Board(object):
 
     def remove_key_from_row(self, xposition, key):
         for z in xrange(self.horizontal_size):
-            if z != xposition:
+            if z / self.hgrid  != xposition / self.hgrid :
                 self.grid_val[(xposition, z)] = self.grid_val[(xposition, z)].replace(key, '')
     
     def remove_key_from_column(self, yposition, key):
-        pass
-    
+        for z in xrange(self.horizontal_size):
+            if z / self.vgrid  != yposition / self.vgrid:
+                self.grid_val[(z, yposition)] = self.grid_val[(z,yposition)].replace(key, '')
+      
     
     def box_locked_candidate(self):
+        self.count_candidates()
         a = [(r, s) for r in range(self.vgrid) for s in range(self.hgrid)]
         key_list = {}
         for a1 in a:
@@ -69,19 +77,52 @@ class Board(object):
                             key_list[v] = [(b, c)]
             for key in key_list.keys():
                 positions = key_list[key]
-                if len(positions)>1:
+                if len(positions) > 1:
                     xpositions = set(_[0] for _ in positions)
                     ypositions = set(_[1] for _ in positions)
                     if len(xpositions) == 1:
                         self.remove_key_from_row(xpositions.pop(), key)
                     if len(ypositions) == 1:
-                        self.remove_key_from_column(ypositions.pop(), key)
-                 
-                        
+                        self.remove_key_from_column(ypositions.pop(), key)   
+        self.count_candidates()                
                         
     def row_column_locked_candidate(self):
         pass
     
+
+    def remove_pair_from_row(self, x, pairkey):
+        for y in xrange(self.vertical_size):
+            if self.grid_val[(x,y)] != pairkey:
+                self.grid_val[(x,y)] = self.grid_val[(x,y)].translate(None,pairkey)
+    
+
+    def remove_pair_from_column(self, y, pairkey):
+        for x in xrange(self.vertical_size):
+            if self.grid_val[(x,y)] != pairkey:
+                self.grid_val[(x,y)] = self.grid_val[(x,y)].translate(None,pairkey)
+    
+    
+    def pair(self):
+        # pair in a row
+        for x in xrange(self.horizontal_size):
+            candidate_pairs = set()
+            for y in xrange(self.vertical_size):
+                if len(self.grid_val[(x,y)]) == 2:
+                    if self.grid_val[(x,y)] in candidate_pairs:
+                        self.remove_pair_from_row( x, self.grid_val[(x,y)])
+                    else:
+                        candidate_pairs.add(self.grid_val[(x,y)])
+        # pair in a column
+        for y in xrange(self.horizontal_size):
+            candidate_pairs = set()
+            for x in xrange(self.vertical_size):
+                if len(self.grid_val[(x,y)]) == 2:
+                    if self.grid_val[(x,y)] in candidate_pairs:
+                        self.remove_pair_from_column( y, self.grid_val[(x,y)])
+                    else:
+                        candidate_pairs.add(self.grid_val[(x,y)])   
+        #TODO: pair in a box  
+                                    
     def reduce_candidate_keys(self):
         'This is basically the singles rule'
         for x in xrange(self.horizontal_size):
@@ -95,12 +136,12 @@ class Board(object):
          
                 
     def update_grid(self):
-        updated =False
+        updated = False
         for x in xrange(self.horizontal_size):
             for y in xrange(self.vertical_size):
-                if len(self.grid_val[(x, y)]) == 1 and self.grid[(x,y)] == 0:
-                    self.grid[(x,y)] = self.grid_val[(x, y)]
-                    updated =True
+                if len(self.grid_val[(x, y)]) == 1 and self.grid[(x, y)] == 0:
+                    self.grid[(x, y)] = self.grid_val[(x, y)]
+                    updated = True
         return updated
     
     def create_candidate_keys(self):
@@ -137,7 +178,7 @@ class Board(object):
             if not (x + 1) % 3:
                 print '\n' + '-' * (9 * width + 20),
             print
-        print "Remaining elements", sum(len(_)>1 for _ in self.grid_val.values())
+        print "Remaining elements", sum(len(_) > 1 for _ in self.grid_val.values())
         
     def get_Grid(self):
         return self.grid
@@ -160,5 +201,6 @@ class Board(object):
             while(self.update_grid()):
                 self.reduce_candidate_keys()
             # self.hidden_singles()
-            #self.box_locked_candidate()
-            self.print_grid()
+            self.box_locked_candidate()
+            self.pair()
+            self.print_grid(True)
