@@ -14,18 +14,18 @@ class Board(object):
     
     def reduce_keys_from_rows(self, x):
         for z in xrange(self.vertical_size):
-            if self.grid[(x,z)] != 0:
+            if self.grid[(x, z)] != 0:
                 for y in xrange(self.horizontal_size):
-                    if z!=y:
-                        self.grid_val[(x,y)] = self.grid_val[(x,y)].replace(self.grid[(x,z)], '')
+                    if z != y:
+                        self.grid_val[(x, y)] = self.grid_val[(x, y)].replace(self.grid[(x, z)], '')
         
     
     def reduce_keys_from_colums(self, y):
         for z in xrange(self.horizontal_size):
-            if self.grid[(z,y)] != 0:
+            if self.grid[(z, y)] != 0:
                 for x in xrange(self.vertical_size):
-                    if z!=x:
-                        self.grid_val[(x,y)] = self.grid_val[(x,y)].replace(self.grid[(z,y)], '')
+                    if z != x:
+                        self.grid_val[(x, y)] = self.grid_val[(x, y)].replace(self.grid[(z, y)], '')
     
     
     def reduce_keys_from_box(self, x, y):
@@ -36,17 +36,49 @@ class Board(object):
         
         for a in xrange(grid_nos[0] * 3, grid_nos[0] * 3 + 3):
             for b in xrange(grid_nos[1] * 3, grid_nos[1] * 3 + 3):
-                if self.grid[(a,b)] != 0:
-                    c = self.grid_val[(x,y)]
-                    self.grid_val[(x,y)] = c.replace(self.grid[(a,b)], '')  if len(c) > 1 else c 
+                if self.grid[(a, b)] != 0:
+                    c = self.grid_val[(x, y)]
+                    self.grid_val[(x, y)] = c.replace(self.grid[(a, b)], '')  if len(c) > 1 else c 
                     
                     
     def hidden_singles(self):
         pass
         
-    def box_locked_candidate(self):
+
+    def remove_key_from_row(self, xposition, key):
+        for z in xrange(self.horizontal_size):
+            if z != xposition:
+                self.grid_val[(xposition, z)] = self.grid_val[(xposition, z)].replace(key, '')
+    
+    def remove_key_from_column(self, yposition, key):
         pass
     
+    
+    def box_locked_candidate(self):
+        a = [(r, s) for r in range(self.vgrid) for s in range(self.hgrid)]
+        key_list = {}
+        for a1 in a:
+            for b in xrange(a1[0] * self.vgrid , a1[0] * self.vgrid + self.vgrid):
+                for c in xrange(a1[1] * self.hgrid, a1[1] * self.hgrid + self.hgrid):
+                    val = self.grid_val[(b, c)]
+                    val_list = list(val)
+                    for v in val_list:
+                        try:
+                            key_list[v] += [(b, c)]
+                        except KeyError:
+                            key_list[v] = [(b, c)]
+            for key in key_list.keys():
+                positions = key_list[key]
+                if len(positions)>1:
+                    xpositions = set(_[0] for _ in positions)
+                    ypositions = set(_[1] for _ in positions)
+                    if len(xpositions) == 1:
+                        self.remove_key_from_row(xpositions.pop(), key)
+                    if len(ypositions) == 1:
+                        self.remove_key_from_column(ypositions.pop(), key)
+                 
+                        
+                        
     def row_column_locked_candidate(self):
         pass
     
@@ -56,7 +88,7 @@ class Board(object):
             for y in xrange(self.vertical_size):
                 if self.grid[(x, y)] == 0:
                     self.reduce_keys_from_rows(x)
-                    self.reduce_keys_from_colums( y)
+                    self.reduce_keys_from_colums(y)
                     self.reduce_keys_from_box(x, y)
                     pass
         self.print_grid(True)
@@ -106,6 +138,8 @@ class Board(object):
         '''
         self.vertical_size = 9
         self.horizontal_size = 9
+        self.hgrid = 3
+        self.vgrid = 3
         if len(board_string) != self.vertical_size * self.horizontal_size:
             raise SodukuException("Soduku board must have 9*9 grid.")
         else:
@@ -113,3 +147,5 @@ class Board(object):
             self.board_grid()
             self.create_candidate_keys()
             # self.hidden_singles()
+            #self.box_locked_candidate()
+            self.print_grid(True)
