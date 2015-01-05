@@ -94,13 +94,24 @@ class Board(object):
         self.print_grid(True)
          
                 
+    def update_grid(self):
+        updated =False
+        for x in xrange(self.horizontal_size):
+            for y in xrange(self.vertical_size):
+                if len(self.grid_val[(x, y)]) == 1 and self.grid[(x,y)] == 0:
+                    self.grid[(x,y)] = self.grid_val[(x, y)]
+                    updated =True
+        return updated
+    
     def create_candidate_keys(self):
         self.grid_val = {}
         for x in xrange(self.horizontal_size):
             for y in xrange(self.vertical_size):
                 self.grid_val[(x, y)] = '123456789' if self.grid[(x, y)] == 0 else self.grid[(x, y)]
-        self.reduce_candidate_keys()        
-                
+        self.print_grid()
+        self.reduce_candidate_keys()         
+        
+               
     def board_grid(self):
         '''
         create the board_grid
@@ -126,7 +137,7 @@ class Board(object):
             if not (x + 1) % 3:
                 print '\n' + '-' * (9 * width + 20),
             print
-        print "Remaining elements", self.grid.values().count(0)
+        print "Remaining elements", sum(len(_)>1 for _ in self.grid_val.values())
         
     def get_Grid(self):
         return self.grid
@@ -146,6 +157,8 @@ class Board(object):
             self.board_string = board_string
             self.board_grid()
             self.create_candidate_keys()
+            while(self.update_grid()):
+                self.reduce_candidate_keys()
             # self.hidden_singles()
             #self.box_locked_candidate()
-            self.print_grid(True)
+            self.print_grid()
