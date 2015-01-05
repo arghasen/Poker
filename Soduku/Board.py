@@ -102,7 +102,15 @@ class Board(object):
                 self.grid_val[(x,y)] = self.grid_val[(x,y)].translate(None,pairkey)
     
     
+    def remove_pair_from_grid(self, gridnum, pairkey):
+        for x in xrange(gridnum[0] * self.vgrid , gridnum[0] * self.vgrid + self.vgrid):
+            for y in xrange(gridnum[1] * self.hgrid, gridnum[1] * self.hgrid + self.hgrid):
+                if self.grid_val[(x,y)] != pairkey:
+                    self.grid_val[(x,y)] = self.grid_val[(x,y)].translate(None,pairkey)
+    
+    
     def pair(self):
+        self.count_candidates()
         # pair in a row
         for x in xrange(self.horizontal_size):
             candidate_pairs = set()
@@ -122,7 +130,20 @@ class Board(object):
                     else:
                         candidate_pairs.add(self.grid_val[(x,y)])   
         #TODO: pair in a box  
-                                    
+        a = [(r, s) for r in range(self.vgrid) for s in range(self.hgrid)]
+        for a1 in a:
+            candidate_pairs = set()
+            for b in xrange(a1[0] * self.vgrid , a1[0] * self.vgrid + self.vgrid):
+                for c in xrange(a1[1] * self.hgrid, a1[1] * self.hgrid + self.hgrid):
+                    val = self.grid_val[(b, c)]
+                    if len(val) == 2:
+                        if self.grid_val[(b,c)] in candidate_pairs:
+                            self.remove_pair_from_grid( a1, self.grid_val[(b,c)])
+                        else:
+                            candidate_pairs.add(self.grid_val[(b,c)])  
+        self.count_candidates()      
+        
+                              
     def reduce_candidate_keys(self):
         'This is basically the singles rule'
         for x in xrange(self.horizontal_size):
@@ -201,6 +222,9 @@ class Board(object):
             while(self.update_grid()):
                 self.reduce_candidate_keys()
             # self.hidden_singles()
-            self.box_locked_candidate()
-            self.pair()
+                self.box_locked_candidate()
+                self.pair()
+#             while(self.update_grid()):
+#                 self.reduce_candidate_keys()
+#             self.pair()
             self.print_grid(True)
