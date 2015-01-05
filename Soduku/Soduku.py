@@ -115,7 +115,7 @@ def startSoduku(filename):
     file_ptr =open(filename)
     board_string = file_ptr.read()
     board = Board(board_string)
-    board.print_grid(True)
+    #board.print_grid(True)
     
 if __name__ == "__main__":
     if DEBUG:
