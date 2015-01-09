@@ -8,11 +8,10 @@ for i in range(count):
         maxval=maxval/2
         maxprime=2        
     for x in xrange(3,int(math.sqrt(maxval))+1,2 ):
-        while (maxval%x == 0)
-            print x;
+        while (maxval%x == 0):
             maxval = maxval/x;
             maxprime =x
         if maxval==1:
             break
-    print maxprime
+    print maxprime if maxval==1 else maxval
         
