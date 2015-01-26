@@ -47,7 +47,24 @@ class Board(object):
                     
                     
     def hidden_singles(self):
-        pass
+        #rowwise hiden single
+        self.count_candidates()
+        for b in xrange(self.horizontal_size):
+            key_list={}
+            for c in xrange(self.vertical_size):
+                val = self.grid_val[(b, c)]
+                val_list = list(val)
+                for v in val_list:
+                    try:
+                        key_list[v] += [(b, c)]
+                    except KeyError:
+                        key_list[v] = [(b, c)]
+            print key_list
+            for key in key_list.keys():
+                if len(key_list[key]) == 1 and len(self.grid_val[key_list[key][0]])>1:
+                    self.grid_val[key_list[key][0]] = key
+                    print "howd", self.grid_val[key_list[key][0]]
+        self.count_candidates()
         
 
     def remove_key_from_row(self, xposition, key):
@@ -129,7 +146,7 @@ class Board(object):
                         self.remove_pair_from_column( y, self.grid_val[(x,y)])
                     else:
                         candidate_pairs.add(self.grid_val[(x,y)])   
-        #TODO: pair in a box  
+        # pair in a box  
         a = [(r, s) for r in range(self.vgrid) for s in range(self.hgrid)]
         for a1 in a:
             candidate_pairs = set()
@@ -221,10 +238,12 @@ class Board(object):
             self.create_candidate_keys()
             while(self.update_grid()):
                 self.reduce_candidate_keys()
-            # self.hidden_singles()
-                self.box_locked_candidate()
-                self.pair()
-#             while(self.update_grid()):
-#                 self.reduce_candidate_keys()
-#             self.pair()
+            #self.hidden_singles()
+            self.box_locked_candidate()
+            self.pair()
+            while(self.update_grid()):
+                self.reduce_candidate_keys()
+            self.pair()
+            self.print_grid(True)
+            self.hidden_singles()
             self.print_grid(True)

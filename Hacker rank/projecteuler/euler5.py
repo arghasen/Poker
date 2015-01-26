@@ -1,3 +1,4 @@
+# 
 def gcd(a, b):
     """Return greatest common divisor using Euclid's Algorithm."""
     while b:      
